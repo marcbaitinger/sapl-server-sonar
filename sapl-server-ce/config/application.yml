@@ -1,0 +1,60 @@
+---
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://auth-server:8080/default"
+  datasource:
+    password: "password"
+    driverClassName: "org.h2.Driver"
+    username: "sa"
+  rsocket:
+    server:
+      port: "${RSOCKET_PORT:7000}"
+      transport: "tcp"
+      ssl:
+        key-alias: "netty"
+        key-store-type: "PKCS12"
+        key-store: "file:config/keystore.p12"
+        key-password: "changeme"
+        enabled: true
+        key-store-password: "changeme"
+server:
+  address: "localhost"
+  port: "${PORT:8443}"
+  servlet:
+    session:
+      cookie:
+        same-site: "strict"
+  ssl:
+    key-alias: "netty"
+    key-store-type: "PKCS12"
+    key-store: "file:config/keystore.p12"
+    key-password: "changeme"
+    enabled: true
+    key-store-password: "changeme"
+io:
+  sapl:
+    server:
+      allowApiKeyAuth: true
+      allowOauth2Auth: false
+      apiKeyCaching:
+        expire: 300
+        maxSize: 10000
+        enabled: true
+      accesscontrol:
+        encoded-admin-password: "$argon2id$v=19$m=16384,t=2,p=1$JPvSH/6Tacj0aM4v1ci8Rw$7na2Jqkqcif4XXbQYUYnCCjoU1tzNbg8qy9hcCd8tCY"
+        admin-username: "demo"
+      apiKeyHeaderName: "API_KEY"
+      allowBasicAuth: true
+    pdp:
+      embedded:
+        print-text-report: true
+        print-json-report: true
+        pretty-print-reports: false
+        print-trace: true
+logging:
+  level:
+    '[io.sapl.server.ce]': "DEBUG"
+    '[io.sapl]': "DEBUG"
